@@ -1,0 +1,5 @@
+id,fecha,producto,cantidad,precio_unitario
+1,2023-10-01,Laptop X,2,1500.50
+2,2023-10-01,Mouse Inalámbrico,5,25.00
+3,2023-10-02,Teclado Mecánico,ERR,80.00   <-- (Línea con error intencional)
+4,2023-10-02,Monitor 24",1,200.00
