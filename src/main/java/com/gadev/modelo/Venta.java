@@ -40,4 +40,9 @@ public class Venta {
     public double getPrecioUnitario() {
         return precioUnitario;
     }
+
+    @Override
+    public String toString() {
+        return "[" +  id + ", " + fecha + ", " + producto + ", " + cantidad + ", " + precioUnitario + "]";
+    }
 }
