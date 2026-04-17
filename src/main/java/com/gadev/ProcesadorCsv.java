@@ -15,7 +15,6 @@ public class ProcesadorCsv {
          List<Venta> lista = new ArrayList<>();
 
          try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
-             ;
              reader.readLine();
 
              String linea;
@@ -31,19 +30,16 @@ public class ProcesadorCsv {
 
                      lista.add(new Venta(id, fecha, producto, cantidad, precioUnitario));
                  } catch (NumberFormatException | DateTimeParseException e) {
-                     System.out.println("Error: " + e.getMessage());
+                     System.out.println("Error de formato en la linea: " + linea);
                  }
-
              }
 
-         } catch (IOException e){
-             System.out.println("Error: " + e.getMessage());
          }
 
          return lista;
      }
 
-     public void generarReporteResumen(List<Venta> ventas, String rutaSalida){
+     public void generarReporteResumen(List<Venta> ventas, String rutaSalida) throws IOException{
          try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaSalida))) {
              writer.write("=== REPORTE DE VENTAS ===");
              writer.newLine();
@@ -56,8 +52,8 @@ public class ProcesadorCsv {
              writer.write("Total de artículos vendidos: " + totalProductos);
              writer.newLine();
              writer.write("Ingreso Total Bruto: $" + ingresoTotal);
-         } catch (IOException e) {
-             throw new RuntimeException("Error al generar el reporte: " + rutaSalida, e);
+             writer.newLine();
+             writer.write("=========================");
          }
      }
 
