@@ -2,14 +2,10 @@ package com.gadev;
 
 import com.gadev.modelo.Venta;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Path;
+import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ProcesadorCsv {
@@ -18,8 +14,8 @@ public class ProcesadorCsv {
      public List<Venta> cargarVentasDesdeCsv(String rutaArchivo) throws IOException{
          List<Venta> lista = new ArrayList<>();
 
-         try {
-             BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo));
+         try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
+             ;
              reader.readLine();
 
              String linea;
@@ -45,6 +41,36 @@ public class ProcesadorCsv {
          }
 
          return lista;
+     }
+
+     public void generarReporteResumen(List<Venta> ventas, String rutaSalida){
+         try (BufferedWriter writer = new BufferedWriter(new FileWriter(rutaSalida))) {
+             writer.write("=== REPORTE DE VENTAS ===");
+             writer.newLine();
+             writer.write("Total de transacciones validas: " + ventas.size());
+             writer.newLine();
+
+             int totalProductos = calcularCantidadProductosVendidos(ventas);
+             double ingresoTotal = calcularSubtotalProductos(ventas);
+
+             writer.write("Total de artículos vendidos: " + totalProductos);
+             writer.newLine();
+             writer.write("Ingreso Total Bruto: $" + ingresoTotal);
+         } catch (IOException e) {
+             throw new RuntimeException("Error al generar el reporte: " + rutaSalida, e);
+         }
+     }
+
+     public int calcularCantidadProductosVendidos(List<Venta> ventas){
+         return ventas.stream()
+                 .mapToInt(Venta::getCantidad)
+                 .sum();
+     }
+
+     public double calcularSubtotalProductos(List<Venta> ventas){
+         return ventas.stream()
+                 .mapToDouble(Venta::getSubtotal)
+                 .sum();
      }
 
      public void imprimirVentas(List<Venta> lista){
